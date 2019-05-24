@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Whatsapp Status</string>
+    <!-- Bottom Tabs Name-->
+    <string name="local_bottom_tab">Local</string>
+    <string name="online_bottom_tab">Online</string>
+    <string name="downloads_bottom_tab">Downloads</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Local Tabs-->
+    <string name="photo_local_tab">Photo</string>
+    <string name="video_local_tab">Video</string>
+</resources>

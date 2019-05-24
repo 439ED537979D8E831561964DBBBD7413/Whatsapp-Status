@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/localTab"
+            android:icon="@drawable/folder_close_icon"
+            android:title="@string/local_bottom_tab"/>
+        <item
+            android:id="@+id/onlineTab"
+            android:icon="@drawable/folder_network_close"
+            android:title="@string/online_bottom_tab"/>
+        <item
+            android:id="@+id/DownloadsTab"
+            android:icon="@drawable/arrow_down_close_icon"
+            android:title="@string/downloads_bottom_tab"/>
+    </group>
+</menu>
