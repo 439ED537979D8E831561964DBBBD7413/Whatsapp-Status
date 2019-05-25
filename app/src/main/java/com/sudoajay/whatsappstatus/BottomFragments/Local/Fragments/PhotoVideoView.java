@@ -2,42 +2,31 @@ package com.sudoajay.whatsappstatus.BottomFragments.Local.Fragments;
 
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import androidx.viewpager.widget.ViewPager;
-
 import com.sudoajay.whatsappstatus.R;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PhotoVideoView extends Activity {
     private PopupWindow mPopupWindow;
     ImageView imageView;
 
     boolean isImageFitToScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_video_view);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         imageView = (ImageView) findViewById(R.id.imageView);
 
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HideStatusBar();
+//                HideStatusBar();
 
 //                // Initialize a new instance of LayoutInflater service
 //                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -105,12 +94,13 @@ public class PhotoVideoView extends Activity {
 
 
     }
-    public void HideStatusBar()
-    {
-      View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+    public void HideStatusBar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
 
 //        // Hide status bar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
