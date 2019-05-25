@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="tabsColor">#ffffff</color>
+
+    <color name="photoVideoViewColor">#3F3C3C</color>
 </resources>

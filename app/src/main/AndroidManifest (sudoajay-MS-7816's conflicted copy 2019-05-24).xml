@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".BottomFragments.Local.Fragments.PhotoVideoView"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:name=".BottomFragments.Local.Fragments.PopupPhotoVideoView"
+            android:theme="@style/PhotoVideoViewTheme"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".BottomFragments.Local.Fragments.PopupPhotoVideoView"
-            android:theme="@style/PhotoVideoViewTheme"
-
+        <activity android:name=".BottomFragments.Local.Fragments.PhotoVideoView"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             tools:ignore="InnerclassSeparator" />
 
     </application>

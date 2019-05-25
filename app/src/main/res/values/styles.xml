@@ -25,9 +25,15 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:actionBarSize">45dp</item>
+
+    <style name="PhotoVideoViewTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+    </style>
+
+    <style name="Animation">
+        <item name="android:windowEnterAnimation">@anim/left</item>
+        <item name="android:windowExitAnimation">@anim/left</item>
     </style>
 </resources>
