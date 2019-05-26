@@ -2,33 +2,28 @@ package com.sudoajay.whatsappstatus.BottomFragments.Local.Fragments;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.view.animation.AnimationSet;
+import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sudoajay.whatsappstatus.R;
 
 public class PhotoVideoView extends AppCompatActivity {
-    private PopupWindow mPopupWindow;
-    ImageView imageView;
-
-    boolean isImageFitToScreen;
-
+    private ImageView imageView, back_Arrow_ImageView;
+    private ConstraintLayout header_ConstraintLayout,bottom_ConstraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_video_view);
-        imageView =  findViewById(R.id.imageView);
+
+        Reference();
 
         // At First Hide It
         HideStatusNavigation();
@@ -38,22 +33,26 @@ public class PhotoVideoView extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (getWindow().getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_VISIBLE) {
+
                     HideStatusNavigation();
                 } else {
                     ShowStatusNavigation();
                 }
 
-                // Set an elevation value for popup window
-                // Call requires API level 21
-                if (Build.VERSION.SDK_INT >= 21) {
-                    mPopupWindow.setElevation(100.0f);
-                }
-                mPopupWindow.setAnimationStyle(R.style.Animation);
+
             }
         });
 
 
     }
+
+    private void Reference(){
+        imageView = findViewById(R.id.imageView);
+        back_Arrow_ImageView = findViewById(R.id.back_Arrow_ImageView);
+        header_ConstraintLayout = findViewById(R.id.header_ConstraintLayout);
+        bottom_ConstraintLayout = findViewById(R.id.bottom_ConstraintLayout);
+    }
+
 
     //    Hide Status
     @SuppressLint("ResourceType")
@@ -63,6 +62,9 @@ public class PhotoVideoView extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
 
+        header_ConstraintLayout.setVisibility(View.INVISIBLE);
+        bottom_ConstraintLayout.setVisibility(View.INVISIBLE);
+
     }
 
     //    Show Status
@@ -71,7 +73,10 @@ public class PhotoVideoView extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
 
-          }
+        header_ConstraintLayout.setVisibility(View.VISIBLE);
+        bottom_ConstraintLayout.setVisibility(View.VISIBLE);
+
+    }
 
 
 }

@@ -33,9 +33,4 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-
-    <style name="Animation">
-        <item name="android:windowEnterAnimation">@anim/up_item_down</item>
-        <item name="android:windowExitAnimation">@anim/up_item_down</item>
-    </style>
 </resources>
