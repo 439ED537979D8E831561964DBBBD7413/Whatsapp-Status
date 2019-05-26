@@ -7,4 +7,5 @@
     <color name="tabsColor">#ffffff</color>
 
     <color name="photoVideoViewColor">#3F3C3C</color>
+    <color name="blackColor">#000</color>
 </resources>
