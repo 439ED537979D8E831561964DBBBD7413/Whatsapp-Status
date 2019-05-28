@@ -8,4 +8,8 @@
 
     <color name="photoVideoViewColor">#3F3C3C</color>
     <color name="blackColor">#000</color>
+
+    <!--Toast Color Background and text Color-->
+    <color name="toastBackgroundColor">@android:color/black</color>
+    <color name="toastTextColor">#D6D1D1</color>
 </resources>
