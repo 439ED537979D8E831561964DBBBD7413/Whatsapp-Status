@@ -10,12 +10,10 @@ import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -101,47 +99,52 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
 
     @SuppressLint("ClickableViewAccessibility")
     private void ShowVideoView(final File file) {
-
-        // fixed something
-        imageView.setVisibility(View.GONE);
-        if(file.exists())
-            Toast.makeText(getApplicationContext(),file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
-        videoView.setVideoPath(file.getAbsolutePath());
-
-
-        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                CustomToast.ToastIt(getApplicationContext(),"Sorry, this video cannot be played");
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(file.getPath(),
-                        MediaStore.Images.Thumbnails.MINI_KIND);
-                Drawable drawble = new BitmapDrawable(getResources(), thumb);
+        try {
+            // fixed something
+            imageView.setVisibility(View.GONE);
+            if (file.exists())
+                videoView.setVideoPath(file.getAbsolutePath());
 
 
-                videoView.setBackground(drawble);
-                return true;
-            }
-        });
+            videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    CustomToast.ToastIt(getApplicationContext(), "Sorry, this video cannot be played");
+                    ShowVideoThumb();
+                    return true;
+                }
+            });
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setVolume(0, 0);
+                }
+            });
+            videoView.start();
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    ShowVideoThumb();
+                }
+            });
+        } catch (Exception ignored) {
 
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setVolume(0, 0);
-            }
-        });
-        videoView.start();
+        }
     }
 
     private void ShowImageView(final File file) {
-        // fixed something
-        videoView.setVisibility(View.GONE);
-        video_Play_ImageView.setVisibility(View.GONE);
+        try {
+            // fixed something
+            videoView.setVisibility(View.GONE);
+            video_Play_ImageView.setVisibility(View.GONE);
 
-        Glide.with(getBaseContext())
-                .asBitmap()
-                .load(Uri.fromFile(file))
-                .into(imageView);
+            Glide.with(getBaseContext())
+                    .asBitmap()
+                    .load(Uri.fromFile(file))
+                    .into(imageView);
+        } catch (Exception ignored) {
 
+        }
     }
 
     public void open_With(File file) {
@@ -180,12 +183,21 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private void ShowVideoThumb(){
+        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(filePath,
+                MediaStore.Images.Thumbnails.MINI_KIND);
+        Drawable drawble = new BitmapDrawable(getResources(), thumb);
+        videoView.setBackground(drawble);
+    }
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.video_Play_ImageView:
-                open_With(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ajay.mp4"));
+                open_With(new File(filePath));
+                videoView.setVideoPath(filePath);
+                videoView.stopPlayback();
+                videoView.start();
                 break;
             case R.id.constraintLayout:
                 if (getWindow().getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_VISIBLE) {

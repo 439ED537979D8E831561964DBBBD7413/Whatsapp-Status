@@ -43,7 +43,7 @@ public class PhotoVideo extends Fragment {
         arrayPath = grabData.getArrayPath();
 
 
-        for(int j = arrayPath.size()-1;j >0 ;j--){
+        for(int j = arrayPath.size()-1;j >=0 ;j--){
             if(tabName.equalsIgnoreCase("photo")){
                 if(arrayPath.get(j).contains(".mp4")){
                     arrayPath.remove(j);
