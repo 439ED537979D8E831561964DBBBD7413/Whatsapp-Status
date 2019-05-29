@@ -1,6 +1,7 @@
 package com.sudoajay.whatsappstatus.BottomFragments.Local.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,16 @@ import com.sudoajay.whatsappstatus.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.ViewHolder> {
     private Context mContext;
-    private Random mRandom = new Random();
+    private String tabName;
     private ArrayList<String> arrayPath;
 
-    public LocalAdapter(final Context context, final ArrayList<String> arrayPath) {
+    public LocalAdapter(final Context context, final ArrayList<String> arrayPath, final String tabName) {
         mContext = context;
         this.arrayPath = arrayPath;
+        this.tabName = tabName;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,6 +34,7 @@ public class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.ViewHolder> 
         public ViewHolder(View v) {
             super(v);
             localCardViewImageView = v.findViewById(R.id.localCardViewImageView);
+
         }
     }
 
@@ -44,9 +46,18 @@ public class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Check_For_Extension(arrayPath.get(position), holder.localCardViewImageView);
         // Set a random height for TextView
+        holder. localCardViewImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,PhotoVideoView.class);
+                intent.putExtra("WhichTab",tabName);
+                intent.putExtra("FilePath",arrayPath.get(position));
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

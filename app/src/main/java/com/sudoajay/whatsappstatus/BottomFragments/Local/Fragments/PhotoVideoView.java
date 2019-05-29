@@ -3,19 +3,26 @@ package com.sudoajay.whatsappstatus.BottomFragments.Local.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.sudoajay.whatsappstatus.BuildConfig;
 import com.sudoajay.whatsappstatus.CustomToast;
 import com.sudoajay.whatsappstatus.R;
@@ -27,22 +34,27 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
     private ImageView imageView, back_Arrow_ImageView, video_Play_ImageView;
     private ConstraintLayout header_ConstraintLayout, bottom_ConstraintLayout, constraintLayout;
     private VideoView videoView;
+    private String tabName, filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_video_view);
+
+        Intent intent = getIntent();
+        if(intent != null){
+         tabName = intent.getStringExtra("WhichTab");
+         filePath = intent.getStringExtra("FilePath");
+        }
 
         Reference();
 
         // At First Hide It
         HideStatusNavigation();
 
-        String fileType = "Image";
-
-        if (false) {
-            ShowImageView();
+        if (tabName.equals("photo")) {
+            ShowImageView(new File(filePath));
         } else {
-            ShowVideoView();
+            ShowVideoView(new File(filePath));
         }
 
     }
@@ -59,6 +71,7 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
 
 //        imageView.setOnClickListener(this);
         constraintLayout.setOnClickListener(this);
+        video_Play_ImageView.setOnClickListener(this);
     }
 
 
@@ -87,33 +100,47 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void ShowVideoView() {
+    private void ShowVideoView(final File file) {
 
         // fixed something
         imageView.setVisibility(View.GONE);
+        if(file.exists())
+            Toast.makeText(getApplicationContext(),file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+        videoView.setVideoPath(file.getAbsolutePath());
 
 
-        final Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.videoplayback);
-        videoView.setVideoURI(videoUri);
-        videoView.start();
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                CustomToast.ToastIt(getApplicationContext(),"Sorry, this video cannot be played");
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(file.getPath(),
+                        MediaStore.Images.Thumbnails.MINI_KIND);
+                Drawable drawble = new BitmapDrawable(getResources(), thumb);
+
+
+                videoView.setBackground(drawble);
+                return true;
+            }
+        });
+
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mp.setVolume(0, 0);
             }
         });
-
+        videoView.start();
     }
 
-    private void ShowImageView() {
+    private void ShowImageView(final File file) {
         // fixed something
         videoView.setVisibility(View.GONE);
         video_Play_ImageView.setVisibility(View.GONE);
 
-//        Uri ImageUri = null;
-//                Glide.with(getApplicationContext())
-//                .load(ImageUri)
-//                .into(imageView);
+        Glide.with(getBaseContext())
+                .asBitmap()
+                .load(Uri.fromFile(file))
+                .into(imageView);
 
     }
 
@@ -157,8 +184,8 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.back_Arrow_ImageView:
-                open_With(new File(Environment.getExternalStorageDirectory().getParent() + "/videoplayback.mp4"));
+            case R.id.video_Play_ImageView:
+                open_With(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ajay.mp4"));
                 break;
             case R.id.constraintLayout:
                 if (getWindow().getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_VISIBLE) {

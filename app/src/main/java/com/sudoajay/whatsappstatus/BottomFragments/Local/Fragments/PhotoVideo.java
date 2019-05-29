@@ -67,7 +67,7 @@ public class PhotoVideo extends Fragment {
 
 
         // Initialize a new instance of RecyclerView Adapter instance
-        RecyclerView.Adapter mAdapter = new LocalAdapter(getContext(),arrayPath);
+        RecyclerView.Adapter mAdapter = new LocalAdapter(getContext(),arrayPath,tabName);
 
         // Set the adapter for RecyclerView
         mRecyclerView.setAdapter(mAdapter);

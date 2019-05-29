@@ -22,7 +22,7 @@ public class GrabData {
         try {
             if (filesPath.exists() && filesPath.list().length != 0) {
                 for (File file : filesPath.listFiles()) {
-                    if (file.isDirectory()) getData(filesPath);
+                    if (file.isDirectory()) getData(file);
                     else {
                         String path = file.getAbsoluteFile().toString();
                         if (path.contains("jpg") || path.contains("mp4"))
