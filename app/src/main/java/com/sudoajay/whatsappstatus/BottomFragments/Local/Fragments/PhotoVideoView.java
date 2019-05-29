@@ -14,6 +14,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,17 +24,18 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.sudoajay.whatsappstatus.BuildConfig;
-import com.sudoajay.whatsappstatus.CustomToast;
+
 import com.sudoajay.whatsappstatus.R;
 
 import java.io.File;
 import java.util.Objects;
 
-public class PhotoVideoView extends AppCompatActivity implements View.OnClickListener {
-    private ImageView imageView, back_Arrow_ImageView, video_Play_ImageView;
-    private ConstraintLayout header_ConstraintLayout, bottom_ConstraintLayout, constraintLayout;
+public class PhotoVideoView extends AppCompatActivity {
+    private ImageView imageView, video_Play_ImageView;
+    private ConstraintLayout header_ConstraintLayout, bottom_ConstraintLayout;
     private VideoView videoView;
     private String tabName, filePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,17 +64,44 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
         videoView = findViewById(R.id.videoView);
         imageView = findViewById(R.id.imageView);
         video_Play_ImageView = findViewById(R.id.video_Play_ImageView);
-        back_Arrow_ImageView = findViewById(R.id.back_Arrow_ImageView);
         header_ConstraintLayout = findViewById(R.id.header_ConstraintLayout);
         bottom_ConstraintLayout = findViewById(R.id.bottom_ConstraintLayout);
-        constraintLayout = findViewById(R.id.constraintLayout);
+        TextView file_Name_TextView = findViewById(R.id.file_Name_TextView);
 
 
-//        imageView.setOnClickListener(this);
-        constraintLayout.setOnClickListener(this);
-        video_Play_ImageView.setOnClickListener(this);
+        file_Name_TextView.setText(new File(filePath).getName());
     }
 
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.video_Play_ImageView:
+                open_With(new File(filePath));
+                videoView.setVideoPath(filePath);
+                videoView.stopPlayback();
+                videoView.start();
+                break;
+            case R.id.constraintLayout:
+                if (getWindow().getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_VISIBLE) {
+                    HideStatusNavigation();
+                } else {
+                    ShowStatusNavigation();
+                }
+                break;
+            case R.id.share_TextView:
+            case R.id.share_ImageView:
+                ShareIt();
+                break;
+            case R.id.save_ImageView:
+            case R.id.save_TextView:
+                new SaveFile(PhotoVideoView.this, filePath, tabName);
+                break;
+            case R.id.back_Arrow_ImageView:
+                onBackPressed();
+                break;
+        }
+
+    }
 
     //    Hide Status
     @SuppressLint("ResourceType")
@@ -109,7 +139,7 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
             videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
-                    CustomToast.ToastIt(getApplicationContext(), "Sorry, this video cannot be played");
+                    ToastIt( "Sorry, this video cannot be played");
                     ShowVideoThumb();
                     return true;
                 }
@@ -160,7 +190,7 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
 
             this.startActivity(newIntent);
         } catch (Exception e) {
-            CustomToast.ToastIt(getApplicationContext(), "No handler for this type of file.");
+            ToastIt( "No handler for this type of file.");
         }
     }
 
@@ -189,24 +219,32 @@ public class PhotoVideoView extends AppCompatActivity implements View.OnClickLis
         Drawable drawble = new BitmapDrawable(getResources(), thumb);
         videoView.setBackground(drawble);
     }
-    @Override
-    public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.video_Play_ImageView:
-                open_With(new File(filePath));
-                videoView.setVideoPath(filePath);
-                videoView.stopPlayback();
-                videoView.start();
-                break;
-            case R.id.constraintLayout:
-                if (getWindow().getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_VISIBLE) {
-                    HideStatusNavigation();
-                } else {
-                    ShowStatusNavigation();
-                }
-                break;
+
+    private void ShareIt() {
+
+        if (tabName.equals("photo")) {
+            Intent shareIntent;
+            Uri bmpUri = Uri.parse("file://" + filePath);
+            shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey Check This Image - ");
+            shareIntent.setType("image/*");
+            startActivity(Intent.createChooser(shareIntent, "Share with"));
+        } else {
+            Intent shareIntent;
+            Uri bmpUri = Uri.parse("file://" + filePath);
+            shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey Check This Video - ");
+            shareIntent.setType("video/*");
+            startActivity(Intent.createChooser(shareIntent, "Share with"));
         }
-
     }
+    private void ToastIt(final String mess){
+        Toast.makeText(getApplicationContext(),mess,Toast.LENGTH_SHORT).show();
+    }
+
 }
