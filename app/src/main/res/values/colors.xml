@@ -12,4 +12,6 @@
     <!--Toast Color Background and text Color-->
     <color name="toastBackgroundColor">@android:color/black</color>
     <color name="toastTextColor">#D6D1D1</color>
+
+    <color name="background_Color">#E6DFDF</color>
 </resources>

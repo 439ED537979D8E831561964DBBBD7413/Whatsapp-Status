@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.sudoajay.whatsappstatus.BottomFragments.DownloadFragment;
+import com.sudoajay.whatsappstatus.BottomFragments.Download.DownloadFragment;
 import com.sudoajay.whatsappstatus.BottomFragments.Local.LocalFragment;
 import com.sudoajay.whatsappstatus.BottomFragments.OnlineFragment;
 import com.sudoajay.whatsappstatus.Permission.AndroidExternalStoragePermission;
@@ -41,12 +41,11 @@ public class MainActivity extends AppCompatActivity {
         // menu
         final Menu menu = bottomNavigationView.getMenu();
 
-        bottomNavigationView.setSelectedItemId(R.id.localTab);
-        LocalFragment localFragment = new LocalFragment();
-        fragment = localFragment.createInstance(MainActivity.this);
+        bottomNavigationView.setSelectedItemId(R.id.DownloadsTab);
+        DownloadFragment downloadFragment = new DownloadFragment();
+        fragment = downloadFragment.createInstance(MainActivity.this);
         Replace_Fragments();
-        menu.findItem(R.id.localTab).setIcon(R.drawable.folder_open_icon);
-
+        menu.findItem(R.id.DownloadsTab).setIcon(R.drawable.arrow_down_open_icon);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -39,7 +39,7 @@ public class PhotoVideo extends Fragment {
 
         Reference();
 
-        GrabData grabData = new GrabData(statusPath);
+        GrabData grabData = new GrabData(getActivity(),statusPath);
         arrayPath = grabData.getArrayPath();
 
 

@@ -1,7 +1,9 @@
 package com.sudoajay.whatsappstatus.Storage;
 
+import android.app.Activity;
 import android.os.Environment;
-import android.util.Log;
+
+import com.sudoajay.whatsappstatus.CustomToast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,10 +12,12 @@ public class GrabData {
 
     private String path;
     private ArrayList<String> arrayPath;
+    private Activity activity;
+    private final String errorMes = "Sorry Can't Process this Please report this";
 
-    public GrabData(final String path) {
-        this.path = path;
-        this.path = Environment.getExternalStorageDirectory().getAbsoluteFile() + path;
+    public GrabData(final Activity activity, final String path) {
+        this.path = Environment.getExternalStorageDirectory().getAbsoluteFile() +"/"+ path;
+        this.activity = activity;
         arrayPath = new ArrayList<>();
         getData(new File(this.path));
     }
@@ -24,14 +28,12 @@ public class GrabData {
                 for (File file : filesPath.listFiles()) {
                     if (file.isDirectory()) getData(file);
                     else {
-                        String path = file.getAbsoluteFile().toString();
-                        if (path.contains("jpg") || path.contains("mp4"))
                             arrayPath.add(file.getAbsolutePath());
                     }
                 }
             }
         } catch (Exception e) {
-            Log.d("onPath", e.getMessage());
+            CustomToast.ToastIt(activity, errorMes);
         }
     }
 
